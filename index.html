@@ -1,0 +1,62 @@
+<html>
+<head>
+    <title>Magic: The Gathering card viewer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="webgl.css" type="text/css">
+    <script src="sylvester.js" type="text/javascript"></script>
+    <script src="glUtils.js" type="text/javascript"></script>
+    <script src="jace.js" type="text/javascript"></script>
+    <script src="objects/mesh.js" type="text/javascript"></script>
+    <script src="objects/scene.js" type="text/javascript"></script>
+    <script src="objects/shader.js" type="text/javascript"></script>
+    <script src="objects/node.js" type="text/javascript"></script>
+    <script src="matrix.js" type="text/javascript"></script>
+    <script src="jquery-3.1.1.js" type="text/javascript"></script>
+    <script src="objects/texture.js" type="text/javascript"></script>
+    <script id="mesh-card" type="application/json">
+        {
+            "vertices": [
+                1.0, 1.39759, 0.0,
+                -1.0, 1.39759, 0.0,
+                1.0, -1.39759, 0.0,
+                -1.0, -1.39759, 0.0
+            ],
+            "texcoord0": [
+                1.0,  0.0,
+                0.0,  0.0,
+                1.0,  1.0,
+                0.0,  1.0
+            ]
+        }
+    </script>
+    <script id="card-fs" type="x-shader/x-fragment">
+        varying highp vec2 vTextureCoord;
+
+        uniform sampler2D uSampler;
+
+        void main(void) {
+          gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        }
+    </script>
+    <script id="card-vs" type="x-shader/x-vertex">
+        attribute vec3 aVertexPosition;
+        attribute vec2 aTextureCoord;
+
+        uniform mat4 uMVMatrix;
+        uniform mat4 uPMatrix;
+
+        varying highp vec2 vTextureCoord;
+
+        void main(void) {
+          gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+          vTextureCoord = aTextureCoord;
+        }
+    </script>
+</head>
+
+<body onload="start()" bgcolor="black">
+    <canvas id="glcanvas" width="800" height="600">
+        Your browser does not support WebGL.
+    </canvas>
+</body>
+</html>
